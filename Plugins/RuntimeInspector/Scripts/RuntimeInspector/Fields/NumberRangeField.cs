@@ -40,7 +40,10 @@ namespace RuntimeInspectorNamespace
 				float fvalue = numberHandler.ConvertToFloat( value );
 				if( fvalue >= slider.BackingField.minValue && fvalue <= slider.BackingField.maxValue )
 				{
-					Value = value;
+                    if (Value != value)
+                        Inspector.DrawerValueChanged();
+
+                    Value = value;
 					return true;
 				}
 			}
@@ -53,8 +56,14 @@ namespace RuntimeInspectorNamespace
 			if( input.BackingField.isFocused )
 				return;
 
-			Value = numberHandler.ConvertFromFloat( value );
-			input.Text = numberHandler.ToString( Value );
+			object newValue = numberHandler.ConvertFromFloat(value);
+
+            if (Value != newValue)
+                Inspector.DrawerValueChanged();
+
+			Value = newValue;
+
+            input.Text = numberHandler.ToString( Value );
 			Inspector.RefreshDelayed();
 		}
 

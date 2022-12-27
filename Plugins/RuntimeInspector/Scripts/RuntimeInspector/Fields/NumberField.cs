@@ -55,6 +55,9 @@ namespace RuntimeInspectorNamespace
 			object value;
 			if( numberHandler.TryParse( input, out value ) )
 			{
+				if (Value != value)
+					Inspector.DrawerValueChanged();
+
 				Value = value;
 				return true;
 			}

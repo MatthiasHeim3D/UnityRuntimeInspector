@@ -204,7 +204,8 @@ namespace RuntimeInspectorNamespace
 			}
 		}
 
-		private bool OnSizeInputBeingChanged( BoundInputField source, string input )
+        // TODO: hook in Inspector.DrawerValueChanged()
+        private bool OnSizeInputBeingChanged( BoundInputField source, string input )
 		{
 			int value;
 			if( int.TryParse( input, NumberStyles.Integer, RuntimeInspectorUtils.numberFormat, out value ) && value >= 0 )

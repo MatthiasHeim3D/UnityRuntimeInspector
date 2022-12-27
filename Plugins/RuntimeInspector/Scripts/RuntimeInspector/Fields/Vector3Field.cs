@@ -101,7 +101,10 @@ namespace RuntimeInspectorNamespace
 					else
 						val.z = value;
 
-					Value = val;
+                    if ((Vector3Int)Value != val)
+                        Inspector.DrawerValueChanged();
+
+                    Value = val;
 					return true;
 				}
 			}
@@ -119,7 +122,10 @@ namespace RuntimeInspectorNamespace
 					else
 						val.z = value;
 
-					Value = val;
+                    if ((Vector3)Value != val)
+                        Inspector.DrawerValueChanged();
+
+                    Value = val;
 					return true;
 				}
 			}

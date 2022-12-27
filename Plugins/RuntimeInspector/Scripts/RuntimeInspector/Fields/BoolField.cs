@@ -26,8 +26,12 @@ namespace RuntimeInspectorNamespace
 		}
 
 		private void OnValueChanged( bool input )
-		{
-			Value = input;
+        {
+            if ((bool)Value != input)
+                Inspector.DrawerValueChanged();
+
+            Value = input;
+
 			Inspector.RefreshDelayed();
 		}
 

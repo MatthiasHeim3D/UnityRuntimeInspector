@@ -108,7 +108,10 @@ namespace RuntimeInspectorNamespace
 					else
 						val.w = value;
 
-					Value = val;
+                    if ((Quaternion)Value != val)
+                        Inspector.DrawerValueChanged();
+
+                    Value = val;
 				}
 				else
 				{
@@ -122,7 +125,10 @@ namespace RuntimeInspectorNamespace
 					else
 						val.w = value;
 
-					Value = val;
+                    if ((Vector4)Value != val)
+                        Inspector.DrawerValueChanged();
+
+                    Value = val;
 				}
 
 				return true;

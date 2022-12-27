@@ -87,7 +87,10 @@ namespace RuntimeInspectorNamespace
 					else
 						val.y = value;
 
-					Value = val;
+                    if ((Vector2Int)Value != val)
+                        Inspector.DrawerValueChanged();
+
+                    Value = val;
 					return true;
 				}
 			}
@@ -103,7 +106,10 @@ namespace RuntimeInspectorNamespace
 					else
 						val.y = value;
 
-					Value = val;
+                    if ((Vector2)Value != val)
+                        Inspector.DrawerValueChanged();
+
+                    Value = val;
 					return true;
 				}
 			}
