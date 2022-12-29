@@ -553,5 +553,20 @@ namespace RuntimeInspectorNamespace
 
 			return methodDrawer;
 		}
-	}
+
+        internal void ExpandRecursive()
+        {
+			if(!IsExpanded)
+				IsExpanded = true;
+
+			foreach(var element in elements)
+			{
+                if (element.GetType().IsSubclassOf(typeof(ExpandableInspectorField)))
+                {
+                    if (((ExpandableInspectorField)element).IsExpanded == false)
+                        ((ExpandableInspectorField)element).ExpandRecursive();
+                }
+            }
+        }
+    }
 }

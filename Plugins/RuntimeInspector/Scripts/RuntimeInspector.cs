@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -90,6 +91,9 @@ namespace RuntimeInspectorNamespace
                 }
             }
         }
+
+        [SerializeField]
+        private bool m_expandAll = true;
 
         [Space]
         [SerializeField]
@@ -376,6 +380,11 @@ namespace RuntimeInspectorNamespace
                     {
                         nextRefreshTime = time + m_refreshInterval;
                         Refresh();
+
+                        if(m_expandAll && currentDrawer.GetType().IsSubclassOf(typeof(ExpandableInspectorField)))
+                        {
+                            ((ExpandableInspectorField)currentDrawer).ExpandRecursive();
+                        }
                     }
                 }
             }
