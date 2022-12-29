@@ -108,7 +108,10 @@ namespace RuntimeInspectorNamespace
 
 		private void OnValueChanged( int input )
 		{
-			Value = currEnumValues[input];
+            if (Value != currEnumValues[input])
+                Inspector.DrawerValueChanged();
+
+            Value = currEnumValues[input];
 			Inspector.RefreshDelayed();
 		}
 

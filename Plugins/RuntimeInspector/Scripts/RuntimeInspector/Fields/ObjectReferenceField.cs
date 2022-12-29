@@ -62,9 +62,9 @@ namespace RuntimeInspectorNamespace
 			if( Value != null && !Value.Equals( null ) )
 			{
 				if( Value is Component )
-					Inspector.InspectInternal( ( (Component) Value ).gameObject );
+					Inspector.InspectInternal( ( (Component) Value ).gameObject, null );
 				else
-					Inspector.InspectInternal( Value );
+					Inspector.InspectInternal( Value, null );
 			}
 		}
 

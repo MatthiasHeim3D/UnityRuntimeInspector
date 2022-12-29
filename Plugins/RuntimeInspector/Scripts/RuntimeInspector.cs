@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -242,7 +243,6 @@ namespace RuntimeInspectorNamespace
         public InspectedObjectChangingDelegate OnInspectedObjectChanging;
 
         public Action ValueChanged;
-        private bool m_valueHasChanged = false;
 
         private ComponentFilterDelegate m_componentFilter;
         public ComponentFilterDelegate ComponentFilter
@@ -354,7 +354,7 @@ namespace RuntimeInspectorNamespace
 #endif
         public void DrawerValueChanged()
         {
-            m_valueHasChanged = true;
+            ValueChanged?.Invoke();
         }
 
         protected override void Update()
@@ -369,7 +369,7 @@ namespace RuntimeInspectorNamespace
                     // Rebind to refresh the exposed variables in Inspector
                     object inspectedObject = m_inspectedObject;
                     StopInspectInternal();
-                    InspectInternal(inspectedObject);
+                    InspectInternal(inspectedObject, ValueChanged);
 
                     isDirty = false;
                     nextRefreshTime = time + m_refreshInterval;
@@ -381,7 +381,7 @@ namespace RuntimeInspectorNamespace
                         nextRefreshTime = time + m_refreshInterval;
                         Refresh();
 
-                        if(m_expandAll && currentDrawer.GetType().IsSubclassOf(typeof(ExpandableInspectorField)))
+                        if (m_expandAll && currentDrawer.GetType().IsSubclassOf(typeof(ExpandableInspectorField)))
                         {
                             ((ExpandableInspectorField)currentDrawer).ExpandRecursive();
                         }
@@ -401,12 +401,6 @@ namespace RuntimeInspectorNamespace
                 else
                 {
                     currentDrawer.Refresh();
-
-                    if (m_valueHasChanged)
-                    {
-                        ValueChanged.Invoke();
-                        m_valueHasChanged = false;
-                    }
                 }
             }
         }
@@ -451,13 +445,13 @@ namespace RuntimeInspectorNamespace
                 currentDrawer.Skin = Skin;
         }
 
-        public void Inspect(object obj)
+        public void Inspect(object obj, Action onChange = null)
         {
             if (!m_isLocked)
-                InspectInternal(obj);
+                InspectInternal(obj, onChange);
         }
 
-        internal void InspectInternal(object obj)
+        internal void InspectInternal(object obj, Action onChange)
         {
             if (inspectLock)
                 return;
@@ -519,6 +513,8 @@ namespace RuntimeInspectorNamespace
 
                     if (ConnectedHierarchy && go && !ConnectedHierarchy.Select(go.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection))
                         ConnectedHierarchy.Deselect();
+
+                    ValueChanged = onChange;
                 }
                 else
                     m_inspectedObject = null;
